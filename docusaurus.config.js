@@ -50,7 +50,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/sufianrubel/steadfast-api-docs/tree/main/',
         },
         blog: {
           showReadingTime: true,
@@ -61,7 +61,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/sufianrubel/steadfast-api-docs/tree/main/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -74,6 +74,49 @@ const config = {
     ],
   ],
 
+  plugins: [
+    [
+      require.resolve("@easyops-cn/docusaurus-search-local"),
+      {
+        indexDocs: true,
+        indexBlog: false,
+        indexPages: true,
+        hashed: true,
+        language: ["en"],
+        highlightSearchTermsOnTargetPage: true,
+        explicitSearchResultPath: true,
+        searchResultLimits: 10,
+        searchBarPosition: "right",
+      },
+    ],
+
+    [
+      "docusaurus-plugin-openapi-docs",
+      {
+        id: "api",
+        docsPluginId: "classic",
+        config: {
+          steadfast: {
+            specPath: "openapi/steadfast-api.yaml",
+            outputDir: "docs/api",
+            sidebarOptions: {
+              groupPathsBy: "tag",
+            },
+          },
+        },
+      },
+    ],
+  ],
+
+  themes: [
+    "@docusaurus/theme-mermaid",
+    "docusaurus-theme-openapi-docs",
+  ],
+
+  markdown: {
+    mermaid: true,
+  },
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -83,9 +126,9 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: 'My Site',
+        title: 'Steadfast API',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'Steadfast API Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -93,60 +136,61 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
-            label: 'Tutorial',
+            label: 'API Docs',
           },
-          { to: '/blog', label: 'Blog', position: 'left' },
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/sufianrubel/steadfast-api-docs',
             label: 'GitHub',
             position: 'right',
           },
         ],
       },
       footer: {
-        style: 'dark',
+        style: "dark",
+
         links: [
+
           {
-            title: 'Docs',
+            title: "Documentation",
             items: [
               {
-                label: 'Tutorial',
-                to: '/docs/intro',
+                label: "Quick Start",
+                to: "/docs/quick-start",
+              },
+              {
+                label: "Authentication",
+                to: "/docs/authentication",
               },
             ],
           },
+
           {
-            title: 'Community',
+            title: "API",
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: "Create Order",
+                to: "/docs/orders/create-order",
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'X',
-                href: 'https://x.com/docusaurus',
+                label: "Bulk Order",
+                to: "/docs/orders/bulk-order",
               },
             ],
           },
+
           {
-            title: 'More',
+            title: "Resources",
             items: [
               {
-                label: 'Blog',
-                to: '/blog',
-              },
-              {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                label: "GitHub",
+                href: "https://github.com/sufianrubel/steadfast-api-docs",
               },
             ],
           },
+
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+
+        copyright: `Copyright © ${new Date().getFullYear()} Steadfast API Documentation.`,
       },
       prism: {
         theme: prismThemes.github,

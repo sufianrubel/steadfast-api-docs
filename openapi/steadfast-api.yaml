@@ -1,0 +1,89 @@
+openapi: 3.0.3
+
+info:
+  title: Steadfast API
+  description: |
+    Official Steadfast Courier API Documentation.
+  version: 1.0.0
+
+servers:
+  - url: https://portal.packzy.com/api/v1
+    description: Production
+
+tags:
+  - name: Authentication
+    description: Authentication APIs
+
+  - name: Orders
+    description: Order Management APIs
+
+  - name: Payments
+    description: Payment APIs
+
+  - name: Returns
+    description: Return Request APIs
+
+paths:
+
+  /create_order:
+    post:
+      tags:
+        - Orders
+      summary: Create Order
+      description: Create a new parcel order.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                invoice:
+                  type: string
+                recipient_name:
+                  type: string
+                recipient_phone:
+                  type: string
+                recipient_address:
+                  type: string
+      responses:
+        "200":
+          description: Order Created Successfully
+
+  /get_balance:
+    get:
+      tags:
+        - Payments
+      summary: Current Balance
+      responses:
+        "200":
+          description: Current balance returned successfully
+
+  /get_payments:
+    get:
+      tags:
+        - Payments
+      summary: Payment List
+      responses:
+        "200":
+          description: Payment list returned successfully
+
+  /create_return_request:
+    post:
+      tags:
+        - Returns
+      summary: Create Return Request
+      responses:
+        "200":
+          description: Return request created successfully
+
+components:
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []

@@ -1,0 +1,1 @@
+{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"type":"object","properties":{"invoice":{"type":"string"},"recipient_name":{"type":"string"},"recipient_phone":{"type":"string"},"recipient_address":{"type":"string"}}}}}}}

@@ -1,43 +1,120 @@
-# Website
+<div align="center">
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+# 🚀 Steadfast API Developer Portal
 
-## Installation
+Enterprise-grade developer documentation for the **Steadfast Courier REST API**, featuring **OpenAPI 3.1**, **Swagger UI**, **Postman Collection**, and **SDK examples**.
+
+[Live Documentation](#) • [Swagger UI](#) • [Postman Collection](#)
+
+![OpenAPI](https://img.shields.io/badge/OpenAPI-3.1-green)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-black)
+![CI](https://img.shields.io/badge/CI-GitHub%20Actions-blue)
+
+</div>
+
+---
+
+## Overview
+
+The Steadfast API Developer Portal helps developers integrate with the Steadfast Courier REST API through comprehensive documentation, interactive API references, production-ready Postman collections, and multi-language SDK examples.
+
+This project focuses on improving the developer experience by providing everything required to build, test, and maintain reliable integrations.
+
+---
+
+## Features
+
+- 📖 OpenAPI 3.1 Specification
+- ⚡ Interactive Swagger UI
+- 📬 Postman Collection
+- 💻 SDK Examples
+- 🔐 Authentication Guide
+- ⚠️ Error Code Reference
+- 📊 Rate Limit Documentation
+- 🚀 GitHub Pages Deployment
+- ⚙️ GitHub Actions CI/CD
+
+---
+
+## Quick Start
+
+```bash
+git clone https://github.com/YOUR_USERNAME/steadfast-api-docs.git
+
+cd steadfast-api-docs
+
+npm install
+
+npm run dev
+```
+
+---
+
+## Project Structure
+
+```
+docs/
+openapi/
+postman/
+sdk/
+swagger/
+.github/
+```
+
+---
+
+## Documentation
+
+- Getting Started
+- Authentication
+- Orders API
+- Tracking API
+- Pricing API
+- Store Management
+- Error Handling
+- SDK Examples
+
+---
+
+## Development
 
 ```bash
 npm install
-```
-
-**Note**: feel free to use the package manager of your choice.
-
-## Local Development
-
-```bash
-npm run start
-```
-
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
-
-## Build
-
-```bash
+npm run dev
 npm run build
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+---
 
-## Deployment
+## GitHub Actions
 
-Using SSH:
+Every push automatically:
 
-```bash
-USE_SSH=true npm run deploy
-```
+- Validate OpenAPI
+- Build Documentation
+- Deploy GitHub Pages
 
-Not using SSH:
+---
 
-```bash
-GIT_USER=<Your GitHub username> npm run deploy
-```
+## Roadmap
 
-If you are using GitHub Pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+- API Playground
+- Search
+- Dark Mode
+- SDK Generator
+- Multi-version Documentation
+
+---
+
+## Contributing
+
+Contributions are welcome.
+
+Please read the **CONTRIBUTING.md** guide before submitting a Pull Request.
+
+---
+
+## License
+
+Licensed under the MIT License.

@@ -1,89 +1,380 @@
 openapi: 3.0.3
-
 info:
-  title: Steadfast API
+  title: Steadfast Courier API
+  version: 1.2.0
   description: |
-    Official Steadfast Courier API Documentation.
-  version: 1.0.0
+    Build delivery workflows for Steadfast Courier merchants. Create consignments,
+    track parcels, manage return requests, and review account balances.
 
+    All requests and responses use JSON. Use the **Authorize** button to add your
+    `Api-Key` and `Secret-Key` before trying an endpoint.
+  contact:
+    name: Steadfast Courier
+    url: https://steadfast.com.bd
 servers:
   - url: https://portal.packzy.com/api/v1
     description: Production
-
 tags:
-  - name: Authentication
-    description: Authentication APIs
-
   - name: Orders
-    description: Order Management APIs
-
+    description: Create and manage parcel consignments.
+  - name: Tracking
+    description: Look up the latest delivery state.
   - name: Payments
-    description: Payment APIs
-
+    description: Review account balance and settlement records.
   - name: Returns
-    description: Return Request APIs
-
+    description: Create return requests for eligible consignments.
+security:
+  - ApiKey: []
+    SecretKey: []
 paths:
-
   /create_order:
     post:
-      tags:
-        - Orders
-      summary: Create Order
-      description: Create a new parcel order.
+      tags: [Orders]
+      operationId: createOrder
+      summary: Create an order
+      description: Creates one parcel consignment and returns its tracking identifiers.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+            examples:
+              dhakaDelivery:
+                summary: Cash-on-delivery order
+                value:
+                  invoice: INV-1001
+                  recipient_name: Nadia Rahman
+                  recipient_phone: '01711111111'
+                  recipient_address: House 17, Road 3/A, Dhanmondi, Dhaka
+                  cod_amount: 1290
+                  note: Deliver before 3 PM
+                  item_description: Cotton panjabi
+                  total_lot: 1
+                  delivery_type: 0
+      responses:
+        '200':
+          description: Consignment created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateOrderResponse'
+              example:
+                status: 200
+                message: Consignment has been created successfully.
+                consignment:
+                  consignment_id: 1424107
+                  invoice: INV-1001
+                  tracking_code: 15BAEB8A
+                  status: in_review
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      x-codeSamples:
+        - lang: cURL
+          source: |
+            curl --request POST 'https://portal.packzy.com/api/v1/create_order' \
+              --header 'Api-Key: YOUR_API_KEY' \
+              --header 'Secret-Key: YOUR_SECRET_KEY' \
+              --header 'Content-Type: application/json' \
+              --data '{"invoice":"INV-1001","recipient_name":"Nadia Rahman","recipient_phone":"01711111111","recipient_address":"Dhaka","cod_amount":1290}'
+  /create_order/bulk-order:
+    post:
+      tags: [Orders]
+      operationId: createBulkOrder
+      summary: Create orders in bulk
+      description: Creates multiple parcel consignments in a single request.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required: [data]
               properties:
-                invoice:
-                  type: string
-                recipient_name:
-                  type: string
-                recipient_phone:
-                  type: string
-                recipient_address:
-                  type: string
+                data:
+                  type: array
+                  minItems: 1
+                  maxItems: 500
+                  items:
+                    $ref: '#/components/schemas/CreateOrderRequest'
       responses:
-        "200":
-          description: Order Created Successfully
-
+        '200':
+          description: Orders processed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: {type: integer, example: 200}
+                  message: {type: string, example: Bulk order request processed.}
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Consignment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /status_by_invoice/{invoice}:
+    get:
+      tags: [Tracking]
+      operationId: statusByInvoice
+      summary: Track by invoice
+      parameters:
+        - $ref: '#/components/parameters/Invoice'
+      responses:
+        '200':
+          $ref: '#/components/responses/DeliveryStatus'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /status_by_trackingcode/{trackingCode}:
+    get:
+      tags: [Tracking]
+      operationId: statusByTrackingCode
+      summary: Track by tracking code
+      parameters:
+        - name: trackingCode
+          in: path
+          required: true
+          description: Tracking code returned when the consignment was created.
+          schema: {type: string, example: 15BAEB8A}
+      responses:
+        '200':
+          $ref: '#/components/responses/DeliveryStatus'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /status_by_cid/{consignmentId}:
+    get:
+      tags: [Tracking]
+      operationId: statusByConsignmentId
+      summary: Track by consignment ID
+      parameters:
+        - name: consignmentId
+          in: path
+          required: true
+          description: Numeric consignment identifier.
+          schema: {type: integer, format: int64, example: 1424107}
+      responses:
+        '200':
+          $ref: '#/components/responses/DeliveryStatus'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /get_balance:
     get:
-      tags:
-        - Payments
-      summary: Current Balance
+      tags: [Payments]
+      operationId: getCurrentBalance
+      summary: Get current balance
       responses:
-        "200":
-          description: Current balance returned successfully
-
+        '200':
+          description: Current merchant balance.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: {type: integer, example: 200}
+                  current_balance: {type: number, format: double, example: 24580.5}
+        '401':
+          $ref: '#/components/responses/Unauthorized'
   /get_payments:
     get:
-      tags:
-        - Payments
-      summary: Payment List
+      tags: [Payments]
+      operationId: getPayments
+      summary: List payments
       responses:
-        "200":
-          description: Payment list returned successfully
-
+        '200':
+          description: Payment history returned successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: {type: integer, example: 200}
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Payment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
   /create_return_request:
     post:
-      tags:
-        - Returns
-      summary: Create Return Request
+      tags: [Returns]
+      operationId: createReturnRequest
+      summary: Create a return request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [consignment_id]
+              properties:
+                consignment_id:
+                  type: integer
+                  format: int64
+                  example: 1424107
+                reason:
+                  type: string
+                  maxLength: 250
+                  example: Customer requested a return.
       responses:
-        "200":
-          description: Return request created successfully
-
+        '200':
+          description: Return request created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: {type: integer, example: 200}
+                  message: {type: string, example: Return request created successfully.}
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
 components:
-
   securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-
-security:
-  - bearerAuth: []
+    ApiKey:
+      type: apiKey
+      in: header
+      name: Api-Key
+      description: API key from your Steadfast merchant panel.
+    SecretKey:
+      type: apiKey
+      in: header
+      name: Secret-Key
+      description: Secret key from your Steadfast merchant panel.
+  parameters:
+    Invoice:
+      name: invoice
+      in: path
+      required: true
+      description: Your unique merchant invoice reference.
+      schema: {type: string, example: INV-1001}
+  schemas:
+    CreateOrderRequest:
+      type: object
+      required: [invoice, recipient_name, recipient_phone, recipient_address, cod_amount]
+      properties:
+        invoice:
+          type: string
+          maxLength: 100
+          description: Unique merchant invoice reference.
+          example: INV-1001
+        recipient_name:
+          type: string
+          maxLength: 100
+          example: Nadia Rahman
+        recipient_phone:
+          type: string
+          pattern: '^01[3-9][0-9]{8}$'
+          example: '01711111111'
+        recipient_address:
+          type: string
+          maxLength: 250
+          example: House 17, Road 3/A, Dhanmondi, Dhaka
+        cod_amount:
+          type: number
+          minimum: 0
+          description: Cash-on-delivery amount in BDT.
+          example: 1290
+        note:
+          type: string
+          nullable: true
+          example: Deliver before 3 PM
+        item_description:
+          type: string
+          nullable: true
+          example: Cotton panjabi
+        total_lot:
+          type: integer
+          minimum: 1
+          default: 1
+        delivery_type:
+          type: integer
+          enum: [0, 1]
+          default: 0
+          description: 0 for home delivery, 1 for hub pickup.
+    Consignment:
+      type: object
+      properties:
+        consignment_id: {type: integer, format: int64, example: 1424107}
+        invoice: {type: string, example: INV-1001}
+        tracking_code: {type: string, example: 15BAEB8A}
+        status:
+          $ref: '#/components/schemas/DeliveryStatus'
+    CreateOrderResponse:
+      type: object
+      properties:
+        status: {type: integer, example: 200}
+        message: {type: string, example: Consignment has been created successfully.}
+        consignment:
+          $ref: '#/components/schemas/Consignment'
+    DeliveryStatus:
+      type: string
+      enum: [pending, in_review, delivered_approval_pending, partial_delivered_approval_pending, cancelled_approval_pending, unknown_approval_pending, delivered, partial_delivered, cancelled, hold, in_transit, unknown]
+      example: in_review
+    Payment:
+      type: object
+      properties:
+        id: {type: integer, format: int64, example: 8361}
+        amount: {type: number, format: double, example: 18540}
+        status: {type: string, example: paid}
+        created_at: {type: string, format: date-time, example: '2026-07-21T10:45:00Z'}
+    Error:
+      type: object
+      properties:
+        status: {type: integer}
+        message: {type: string}
+  responses:
+    Unauthorized:
+      description: Missing or invalid API credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example: {status: 401, message: Unauthenticated.}
+    ValidationError:
+      description: One or more request fields failed validation.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+              - type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items: {type: string}
+          example:
+            status: 422
+            message: Validation failed.
+            errors:
+              recipient_phone: [The recipient phone must be 11 digits.]
+    NotFound:
+      description: No matching consignment was found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example: {status: 404, message: Consignment not found.}
+    DeliveryStatus:
+      description: Latest delivery state.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status: {type: integer, example: 200}
+              delivery_status:
+                $ref: '#/components/schemas/DeliveryStatus'
+          example: {status: 200, delivery_status: in_transit}

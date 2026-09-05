@@ -1,47 +1,32 @@
 ---
+title: Welcome
+description: Build courier and delivery workflows with the Steadfast Courier REST API.
 sidebar_position: 1
+slug: /
 ---
 
-# Tutorial Intro
+# Steadfast Courier API
 
-Let's discover **Docusaurus in less than 5 minutes**.
+The Steadfast Courier REST API lets merchant applications create consignments, track parcel delivery, request returns, and review payments through a predictable JSON interface.
 
-## Getting Started
+## Start here
 
-Get started by **creating a new site**.
+1. Get your \`Api-Key\` and \`Secret-Key\` from the Steadfast merchant panel.
+2. Review [authentication](./authentication.md) and keep both credentials on your server.
+3. Follow the [quick start](./quick-start.md) to create your first order.
+4. Use the [interactive API Explorer](/api-explorer) to inspect schemas and test a request.
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+:::tip Production base URL
+\`https://portal.packzy.com/api/v1\`
+:::
 
-### What you'll need
+## Core workflows
 
-- [Node.js](https://nodejs.org/en/download/) version 20.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+| Workflow | What you can do |
+| --- | --- |
+| Orders | Create one consignment or submit multiple orders together |
+| Tracking | Check status by invoice, tracking code, or consignment ID |
+| Returns | Submit a return request for an eligible consignment |
+| Payments | Review your current balance and payment history |
 
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
-
-```bash
-npm init docusaurus@latest my-website classic
-```
-
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+All API responses use JSON. Send \`Content-Type: application/json\` for requests with a body.

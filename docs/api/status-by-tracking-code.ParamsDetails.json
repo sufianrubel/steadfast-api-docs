@@ -1,0 +1,1 @@
+{"parameters":[{"name":"trackingCode","in":"path","required":true,"description":"Tracking code returned when the consignment was created.","schema":{"type":"string","example":"15BAEB8A"}}]}

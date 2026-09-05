@@ -1,0 +1,1 @@
+{"parameters":[{"name":"consignmentId","in":"path","required":true,"description":"Numeric consignment identifier.","schema":{"type":"integer","format":"int64","example":1424107}}]}

@@ -1,0 +1,1 @@
+{"parameters":[{"name":"invoice","in":"path","required":true,"description":"Your unique merchant invoice reference.","schema":{"type":"string","example":"INV-1001"}}]}

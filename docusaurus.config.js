@@ -13,6 +13,15 @@ const config = {
   title: "Steadfast Courier API Documentation",
   tagline: "Complete REST API Documentation",
   favicon: "img/favicon.ico",
+  headTags: [
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'theme-color',
+        content: '#34A487',
+      },
+    },
+  ],
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {

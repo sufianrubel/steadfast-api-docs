@@ -1,43 +1,35 @@
-# Website
+# Steadfast Courier API Documentation
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+Developer documentation and an interactive API explorer for the Steadfast Courier REST API, built with Docusaurus.
 
-## Installation
+## Requirements
 
-```bash
-npm install
-```
+- Node.js 20 or later
+- npm 10 or later
 
-**Note**: feel free to use the package manager of your choice.
-
-## Local Development
+## Development
 
 ```bash
-npm run start
+npm ci
+npm start
 ```
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+## API documentation
 
-## Build
+`openapi/steadfast-api.yaml` is the source of truth for generated endpoint pages in `docs/api`.
+
+Regenerate those pages after changing the specification:
+
+```bash
+npm run docusaurus -- clean-api-docs steadfast
+npm run docusaurus -- gen-api-docs steadfast
+```
+
+## Production build
 
 ```bash
 npm run build
+npm run serve
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-## Deployment
-
-Using SSH:
-
-```bash
-USE_SSH=true npm run deploy
-```
-
-Not using SSH:
-
-```bash
-GIT_USER=<Your GitHub username> npm run deploy
-```
-
-If you are using GitHub Pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+The GitHub Actions workflow publishes the generated `build` directory to GitHub Pages after changes land on `main`.

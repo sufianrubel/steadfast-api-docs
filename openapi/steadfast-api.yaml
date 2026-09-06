@@ -7,7 +7,8 @@ info:
     track parcels, manage return requests, and review account balances.
 
     All requests and responses use JSON. Use the **Authorize** button to add your
-    `Api-Key` and `Secret-Key` before trying an endpoint.
+    `Api-Key` and `Secret-Key` before trying an endpoint. Get both credentials
+    from the [Steadfast merchant panel](https://steadfast.com.bd/login).
   contact:
     name: Steadfast Courier
     url: https://steadfast.com.bd
@@ -84,7 +85,7 @@ paths:
       tags: [Orders]
       operationId: createBulkOrder
       summary: Create orders in bulk
-      description: Creates multiple parcel consignments in a single request.
+      description: Creates between 1 and 500 parcel consignments in a single request.
       requestBody:
         required: true
         content:
@@ -99,6 +100,27 @@ paths:
                   maxItems: 500
                   items:
                     $ref: '#/components/schemas/CreateOrderRequest'
+            examples:
+              twoOrders:
+                summary: Two cash-on-delivery orders
+                value:
+                  data:
+                    - invoice: INV-1001
+                      recipient_name: Nadia Rahman
+                      recipient_phone: '01711111111'
+                      recipient_address: House 17, Road 3/A, Dhanmondi, Dhaka
+                      cod_amount: 1290
+                      note: Deliver before 3 PM
+                      item_description: Cotton panjabi
+                      total_lot: 1
+                      delivery_type: 0
+                    - invoice: INV-1002
+                      recipient_name: Tanvir Hasan
+                      recipient_phone: '01811111111'
+                      recipient_address: Agrabad, Chattogram
+                      cod_amount: 850
+                      total_lot: 1
+                      delivery_type: 0
       responses:
         '200':
           description: Orders processed successfully.
@@ -113,10 +135,30 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Consignment'
+              example:
+                status: 200
+                message: Bulk order request processed.
+                data:
+                  - consignment_id: 1424107
+                    invoice: INV-1001
+                    tracking_code: 15BAEB8A
+                    status: in_review
+                  - consignment_id: 1424108
+                    invoice: INV-1002
+                    tracking_code: 15BAEB8B
+                    status: in_review
         '401':
           $ref: '#/components/responses/Unauthorized'
         '422':
           $ref: '#/components/responses/ValidationError'
+      x-codeSamples:
+        - lang: cURL
+          source: |
+            curl --request POST 'https://portal.packzy.com/api/v1/create_order/bulk-order' \
+              --header 'Api-Key: YOUR_API_KEY' \
+              --header 'Secret-Key: YOUR_SECRET_KEY' \
+              --header 'Content-Type: application/json' \
+              --data '{"data":[{"invoice":"INV-1001","recipient_name":"Nadia Rahman","recipient_phone":"01711111111","recipient_address":"Dhaka","cod_amount":1290},{"invoice":"INV-1002","recipient_name":"Tanvir Hasan","recipient_phone":"01811111111","recipient_address":"Chattogram","cod_amount":850}]}'
   /status_by_invoice/{invoice}:
     get:
       tags: [Tracking]
@@ -245,12 +287,12 @@ components:
       type: apiKey
       in: header
       name: Api-Key
-      description: API key from your Steadfast merchant panel.
+      description: API key from the Steadfast merchant panel at https://steadfast.com.bd/login.
     SecretKey:
       type: apiKey
       in: header
       name: Secret-Key
-      description: Secret key from your Steadfast merchant panel.
+      description: Secret key from the Steadfast merchant panel at https://steadfast.com.bd/login.
   parameters:
     Invoice:
       name: invoice

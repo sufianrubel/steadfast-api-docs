@@ -1,32 +1,41 @@
 ---
-title: Welcome
-description: Build courier and delivery workflows with the Steadfast Courier REST API.
+title: Steadfast Courier API
+description: Integrate order creation, parcel tracking, returns, balances, and payments with the Steadfast Courier REST API.
 sidebar_position: 1
 slug: /
 ---
 
 # Steadfast Courier API
 
-The Steadfast Courier REST API lets merchant applications create consignments, track parcel delivery, request returns, and review payments through a predictable JSON interface.
+Use the Steadfast Courier REST API to create consignments, track parcel delivery, request returns, and review account balances and payments.
 
-## Start here
+## Integration path
 
-1. Get your \`Api-Key\` and \`Secret-Key\` from the Steadfast merchant panel.
-2. Review [authentication](./authentication.md) and keep both credentials on your server.
-3. Follow the [quick start](./quick-start.md) to create your first order.
-4. Use the [interactive API Explorer](/api-explorer) to inspect schemas and test a request.
+Follow these steps in order:
 
-:::tip Production base URL
-\`https://portal.packzy.com/api/v1\`
+1. [Get your API credentials](./getting-started.md) from the [Steadfast merchant panel](https://steadfast.com.bd/login).
+2. [Configure authentication](./authentication.md) on your application server.
+3. [Create your first order](./quick-start.md) and save its identifiers.
+4. Follow the [order lifecycle guide](./guides/order-lifecycle.md) to track delivery and handle returns.
+5. Use the [API reference](./api-reference.md) when implementing each endpoint.
+
+:::info Production API
+
+Base URL: `https://portal.packzy.com/api/v1`
+
+All requests and responses use JSON. Requests with a body must include `Content-Type: application/json`.
+
 :::
 
-## Core workflows
+## Available workflows
 
-| Workflow | What you can do |
+| Workflow | Purpose |
 | --- | --- |
-| Orders | Create one consignment or submit multiple orders together |
-| Tracking | Check status by invoice, tracking code, or consignment ID |
-| Returns | Submit a return request for an eligible consignment |
-| Payments | Review your current balance and payment history |
+| Orders | Create one consignment or submit up to 500 orders in one request |
+| Tracking | Check a parcel by invoice, tracking code, or consignment ID |
+| Returns | Request a return for an eligible consignment |
+| Account | Check the merchant balance and list payments |
 
-All API responses use JSON. Send \`Content-Type: application/json\` for requests with a body.
+## Need help?
+
+Start with [error handling](./reference/error-codes.md) and the [FAQ](./faq.md). If an API response differs from the documented contract, contact Steadfast Courier support.

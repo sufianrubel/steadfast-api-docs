@@ -1,34 +1,20 @@
 ---
 title: Changelog
-description: Track API releases, new features, improvements, bug fixes, and breaking changes.
+description: Track Steadfast Courier API releases and breaking changes.
 sidebar_position: 100
 slug: /changelog
 ---
 
 # Changelog
 
-This page lists all notable changes to the Steadfast Courier REST API.
+Release numbers follow semantic versioning:
 
-We follow **Semantic Versioning**:
+- **MAJOR** — breaking changes
+- **MINOR** — backward-compatible features
+- **PATCH** — fixes and documentation improvements
 
-- **MAJOR** – Breaking changes
-- **MINOR** – New features (backward compatible)
-- **PATCH** – Bug fixes and documentation improvements
-
----
-
-## Latest Releases
-
-| Version | Release Date | Highlights |
-|----------|--------------|------------|
-| **v1.2.0** | 2026-07-21 | Added Payments API |
-| **v1.1.0** | 2026-07-15 | Added Bulk Order API |
-| **v1.0.0** | 2026-07-01 | Initial Release |
-
----
-
-## Release History
-
-- **v1.2.0** → Payment APIs
-- **v1.1.0** → Bulk Order API
-- **v1.0.0** → Initial API Release
+| Version | Release date | Highlights |
+| --- | --- | --- |
+| [v1.2.0](./v1.2.0.md) | 2026-07-21 | Added payment listing |
+| [v1.1.0](./v1.1.0.md) | 2026-07-15 | Added bulk order creation |
+| [v1.0.0](./v1.0.0.md) | 2026-07-01 | Initial release |

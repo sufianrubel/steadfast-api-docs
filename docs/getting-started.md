@@ -1,39 +1,44 @@
 ---
-title: Getting started
-description: Understand the Steadfast API basics before making your first request.
+title: Get API credentials
+description: Get the Api-Key and Secret-Key required to call the Steadfast Courier REST API.
 sidebar_position: 2
+slug: /getting-started
 ---
 
-# Getting started
+# Get API credentials
 
-Steadfast exposes a versioned REST API over HTTPS. You can call it from any server-side language or framework that supports HTTP requests.
+Every API request requires credentials associated with an active Steadfast Courier merchant account.
 
-## Before you begin
+## 1. Sign in to the merchant panel
 
-You need an active Steadfast Courier merchant account and API credentials from your merchant panel. Never place the secret key in browser code, mobile apps, public repositories, or logs.
+Open the [Steadfast merchant panel](https://steadfast.com.bd/login) and sign in to your merchant account.
 
-## Request format
+## 2. Get both credentials
 
-Every authenticated request includes both credential headers:
+In the merchant panel, locate your API credentials and copy both values:
 
-\`\`\`http
-Api-Key: YOUR_API_KEY
-Secret-Key: YOUR_SECRET_KEY
-Content-Type: application/json
-\`\`\`
+- `Api-Key`
+- `Secret-Key`
 
-## Response handling
+Use the header names exactly as shown throughout this documentation for consistency. Replace the placeholder values in code samples with your own credentials.
 
-Use the HTTP status code first, then inspect the JSON response body:
+:::warning Keep the Secret-Key private
 
-- \`200\` — the request completed successfully
-- \`401\` — credentials are missing or invalid
-- \`404\` — the requested resource was not found
-- \`422\` — request data failed validation
-- \`500\` — a temporary server-side error occurred
+Use these credentials only in trusted server-side code. Never include them in browser JavaScript, mobile application bundles, public repositories, screenshots, support messages, or application logs.
 
-Store the returned \`consignment_id\` and \`tracking_code\` after creating an order. You can use either identifier to reconcile later status updates.
+:::
 
-## Next step
+## 3. Store credentials securely
 
-Continue to the [quick start](./quick-start.md) or open the [API Explorer](/api-explorer).
+Store the values in environment variables or your deployment platform's secret manager:
+
+```dotenv
+STEADFAST_API_KEY=your_api_key
+STEADFAST_SECRET_KEY=your_secret_key
+```
+
+Do not commit a populated `.env` file to source control.
+
+## 4. Continue the integration
+
+Next, [configure authentication](./authentication.md), then [create your first order](./quick-start.md).

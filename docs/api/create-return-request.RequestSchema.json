@@ -1,1 +1,1 @@
-{"title":"Body"}
+{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["consignment_id"],"properties":{"consignment_id":{"type":"integer","format":"int64","example":1424107},"reason":{"type":"string","maxLength":250,"example":"Customer requested a return."}}}}}}}

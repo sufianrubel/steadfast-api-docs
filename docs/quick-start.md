@@ -1,44 +1,25 @@
 ---
-title: Quick Start
-description: Get started with the Steadfast Courier REST API in just a few minutes.
-sidebar_position: 1
+title: Create your first order
+description: Make an authenticated request and create your first Steadfast Courier consignment.
+sidebar_position: 4
 slug: /quick-start
 ---
 
-# Quick Start
+# Create your first order
 
-This guide will help you integrate the Steadfast Courier REST API and create your first shipment in a few simple steps.
+This guide takes you from stored credentials to a created consignment.
 
----
+## Before you begin
 
-## Prerequisites
+You need:
 
-Before you begin, make sure you have:
+- an active Steadfast Courier merchant account;
+- an `Api-Key` and `Secret-Key` from the [merchant panel](https://steadfast.com.bd/login); and
+- a server-side application or terminal that can make HTTPS requests.
 
-- A Steadfast Courier merchant account
-- An API Key
-- A Secret Key
-- Your store or application ready to make HTTP requests
+## 1. Send the order
 
----
-
-## Step 1: Get API Credentials
-
-Obtain your **API Key** and **Secret Key** from your Steadfast Courier merchant dashboard.
-
-You'll use these credentials to authenticate every API request.
-
----
-
-## Step 2: Set the Base URL
-
-```text
-https://portal.packzy.com/api/v1
-```
-
----
-
-## Step 3: Create Your First Order
+Use a unique invoice reference for each order:
 
 ```bash
 curl --request POST \
@@ -47,25 +28,36 @@ curl --request POST \
   --header "Secret-Key: YOUR_SECRET_KEY" \
   --header "Content-Type: application/json" \
   --data '{
-    "invoice":"INV-1001",
-    "recipient_name":"John Doe",
-    "recipient_phone":"01711111111",
-    "recipient_address":"Dhaka",
-    "cod_amount":500
-}'
+    "invoice": "INV-1001",
+    "recipient_name": "Nadia Rahman",
+    "recipient_phone": "01711111111",
+    "recipient_address": "House 17, Road 3/A, Dhanmondi, Dhaka",
+    "cod_amount": 1290
+  }'
 ```
 
----
+## 2. Verify the response
 
-## Step 4: Check Delivery Status
+A successful response contains the new consignment identifiers:
 
-You can track an order using one of the following endpoints:
+```json
+{
+  "status": 200,
+  "message": "Consignment has been created successfully.",
+  "consignment": {
+    "consignment_id": 1424107,
+    "invoice": "INV-1001",
+    "tracking_code": "15BAEB8A",
+    "status": "in_review"
+  }
+}
+```
 
-- `GET /status_by_invoice/{invoice}`
-- `GET /status_by_trackingcode/{trackingCode}`
-- `GET /status_by_cid/{consignmentId}`
+Store `consignment_id`, `invoice`, and `tracking_code` with the order in your database. You will use them to reconcile and track the parcel.
 
-Example:
+## 3. Check delivery status
+
+Track the order using its invoice reference:
 
 ```bash
 curl --request GET \
@@ -74,28 +66,10 @@ curl --request GET \
   --header "Secret-Key: YOUR_SECRET_KEY"
 ```
 
----
+You can also track by `tracking_code` or `consignment_id`. See [Track by invoice](./api/status-by-invoice.api.mdx) and [delivery statuses](./reference/delivery-statuses.md).
 
-## Step 5: Check Your Balance
+## Next steps
 
-Retrieve your current account balance:
-
-```bash
-curl --request GET \
-  --url https://portal.packzy.com/api/v1/get_balance \
-  --header "Api-Key: YOUR_API_KEY" \
-  --header "Secret-Key: YOUR_SECRET_KEY"
-```
-
----
-
-## What's Next?
-
-Continue with these guides:
-
-- Authentication
-- Create Order API
-- Bulk Order API
-- Delivery Status API
-- Return Request API
-- Payments API
+- Follow the [order lifecycle guide](./guides/order-lifecycle.md).
+- Review the complete [Create an order endpoint](./api/create-order.api.mdx).
+- Learn how to [handle API errors](./reference/error-codes.md).

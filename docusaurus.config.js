@@ -1,11 +1,41 @@
 // @ts-check
-import { themes as prismThemes } from 'prism-react-renderer';
+import {themes as prismThemes} from 'prism-react-renderer';
+
+function ignoreBenignResizeObserverErrors() {
+  return {
+    name: 'ignore-benign-resize-observer-errors',
+    configureWebpack() {
+      return {
+        devServer: {
+          client: {
+            overlay: {
+              runtimeErrors: (error) =>
+                ![
+                  'ResizeObserver loop completed with undelivered notifications.',
+                  'ResizeObserver loop limit exceeded',
+                ].includes(error.message),
+            },
+          },
+        },
+      };
+    },
+  };
+}
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Steadfast Courier API Documentation",
-  tagline: "Complete REST API Documentation",
-  favicon: "img/favicon.ico",
+  title: 'Steadfast Courier API Documentation',
+  tagline: 'Complete REST API Documentation',
+  favicon: 'img/favicon.ico',
+  url: 'https://sufianrubel.github.io',
+  baseUrl: '/steadfast-api-docs/',
+  organizationName: 'sufianrubel',
+  projectName: 'steadfast-api-docs',
+  staticDirectories: ['static', 'openapi'],
+  onBrokenLinks: 'throw',
+  future: {
+    v4: true,
+  },
   headTags: [
     {
       tagName: 'meta',
@@ -15,21 +45,10 @@ const config = {
       },
     },
   ],
-
-  future: {
-    v4: true,
-  },
-  url: 'https://sufianrubel.github.io',
-  baseUrl: '/steadfast-api-docs/',
-  staticDirectories: ['static', 'openapi'],
-  organizationName: 'sufianrubel',
-  projectName: 'steadfast-api-docs',
-  onBrokenLinks: 'throw',
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
   },
-
   presets: [
     [
       'classic',
@@ -37,6 +56,7 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
+          docItemComponent: '@theme/ApiItem',
           editUrl:
             'https://github.com/sufianrubel/steadfast-api-docs/tree/main/',
         },
@@ -47,47 +67,40 @@ const config = {
       }),
     ],
   ],
-
   plugins: [
+    ignoreBenignResizeObserverErrors,
     [
-      require.resolve("@easyops-cn/docusaurus-search-local"),
+      require.resolve('@easyops-cn/docusaurus-search-local'),
       {
         indexDocs: true,
         indexBlog: false,
         indexPages: true,
         hashed: true,
-        language: ["en"],
+        language: ['en'],
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
         searchResultLimits: 10,
-        searchBarPosition: "right",
+        searchBarPosition: 'right',
       },
     ],
-
     [
-      "docusaurus-plugin-openapi-docs",
+      'docusaurus-plugin-openapi-docs',
       {
-        id: "api",
-        docsPluginId: "classic",
+        id: 'api',
+        docsPluginId: 'classic',
         config: {
           steadfast: {
-            specPath: "openapi/steadfast-api.yaml",
-            outputDir: "docs/api",
+            specPath: 'openapi/steadfast-api.yaml',
+            outputDir: 'docs/api',
           },
         },
       },
     ],
   ],
-
-  themes: [
-    "@docusaurus/theme-mermaid",
-    "docusaurus-theme-openapi-docs",
-  ],
-
+  themes: ['@docusaurus/theme-mermaid', 'docusaurus-theme-openapi-docs'],
   markdown: {
     mermaid: true,
   },
-
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -104,7 +117,7 @@ const config = {
         items: [
           {
             type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
+            sidebarId: 'docsSidebar',
             position: 'left',
             label: 'Documentation',
           },
@@ -128,50 +141,32 @@ const config = {
         ],
       },
       footer: {
-        style: "dark",
-
+        style: 'dark',
         links: [
-
           {
-            title: "Documentation",
+            title: 'Documentation',
+            items: [
+              {label: 'Create your first order', to: '/docs/quick-start'},
+              {label: 'Authentication', to: '/docs/authentication'},
+            ],
+          },
+          {
+            title: 'API',
+            items: [
+              {label: 'Order lifecycle', to: '/docs/orders/create-order'},
+              {label: 'Bulk Order', to: '/docs/api/create-bulk-order'},
+            ],
+          },
+          {
+            title: 'Resources',
             items: [
               {
-                label: "Quick Start",
-                to: "/docs/quick-start",
-              },
-              {
-                label: "Authentication",
-                to: "/docs/authentication",
+                label: 'GitHub',
+                href: 'https://github.com/sufianrubel/steadfast-api-docs',
               },
             ],
           },
-
-          {
-            title: "API",
-            items: [
-              {
-                label: "Create Order",
-                to: "/docs/orders/create-order",
-              },
-              {
-                label: "Bulk Order",
-                to: "/docs/orders/bulk-order",
-              },
-            ],
-          },
-
-          {
-            title: "Resources",
-            items: [
-              {
-                label: "GitHub",
-                href: "https://github.com/sufianrubel/steadfast-api-docs",
-              },
-            ],
-          },
-
         ],
-
         copyright: `© ${new Date().getFullYear()} Steadfast Courier. Built for developers shipping across Bangladesh.`,
       },
       prism: {
